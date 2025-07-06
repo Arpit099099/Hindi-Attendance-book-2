@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hindi Class 12th Attendance - Dharmendra Sir</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #e0eafc, #f0f2f5); /* Subtle gradient background */
+      padding: 20px;
+      text-align: center;
+      color: #343a40; /* Darker text for readability */
+    }
+   .logo {
+      width: 120px;
+      height: auto;
+      margin-bottom: 15px;
+      border-radius: 8px; /* Slightly rounded corners for logo */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for logo */
+    }
+    h1 {
+      font-size: 2.2rem; /* Larger heading */
+      margin-bottom: 5px;
+      color: #0056b3; /* A nice blue for main heading */
+    }
+    h2 {
+      font-size: 1.4rem;
+      color: #6c757d;
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+    h3 {
+      font-size: 1.2rem;
+      color: #495057;
+      margin-bottom: 25px;
+    }
+   .section {
+      margin-top: 30px;
+      padding: 25px; /* More padding */
+      background: #ffffff;
+      border-radius: 12px; /* More rounded corners */
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1); /* More prominent shadow */
+      max-width: 700px; /* Max width for sections */
+      margin-left: auto;
+      margin-right: auto;
+      border-top: 5px solid #007bff; /* Accent border top */
+    }
+    table {
+      margin: auto;
+      border-collapse: collapse;
+      width: 100%; /* Full width within section */
+      margin-top: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    th, td {
+      border: 1px solid #dee2e6; /* Lighter border for tables */
+      padding: 12px; /* More padding in table cells */
+      font-size: 0.95rem;
+      text-align: left; /* Align text left in tables */
+    }
+    th {
+      background-color: #e9ecef; /* Lighter header background */
+      font-weight: bold;
+      color: #495057;
+    }
+    input, button, select {
+      margin: 8px 5px; /* Slightly more margin */
+      padding: 10px 15px; /* Larger padding for inputs/buttons */
+      font-size: 1rem;
+      border-radius: 6px; /* Rounded corners for inputs/buttons */
+      border: 1px solid #ced4da;
+    }
+    button {
+      background-color: #007bff; /* Primary blue button */
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease; /* Smooth transition */
+    }
+    button:hover {
+      background-color: #0056b3; /* Darker blue on hover */
+    }
+    pre {
+      text-align: left;
+      max-width: 90%;
+      margin: 20px auto 0 auto;
+      background: #e9ecef; /* Lighter background for pre */
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px dashed #adb5bd; /* Dashed border for pre */
+      font-size: 0.9rem;
+      color: #343a40;
+    }
+   .alert-message {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+   .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+   .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+   .alert-warning {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+    }
+  </style>
+</head>
+<body>
+  <img src="logo.png" alt="Logo" class="logo">
+  <h1>Hindi Class 12th Attendance</h1>
+  <h2>Hindi Classes by Dharmendra Sir</h2>
+  <h3>Contact: 7566805943</h3>
+
+  <div class="section">
+    <h3><i class="fas fa-user-shield"></i> Admin Panel</h3>
+    <div class="form-group">
+      <input id="adminPass" type="password" class="form-control" placeholder="Admin Password">
+    </div>
+    <div class="form-group">
+      <input id="setCode" class="form-control" placeholder="Set Today's Attendance Code">
+    </div>
+    <button onclick="setTodayCode()" class="btn btn-primary"><i class="fas fa-check-circle"></i> Set Code</button>
+    <div id="setCodeMessage" class="alert-message"></div>
+  </div>
+
+  <div class="section">
+    <h3><i class="fas fa-clipboard-check"></i> Mark Attendance</h3>
+    <div class="form-group">
+      <input id="roll" type="number" class="form-control" placeholder="Roll No (1-80)">
+    </div>
+    <div class="form-group">
+      <input id="code" class="form-control" placeholder="Enter Today's Code">
+    </div>
+    <button onclick="markAttendance()" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Submit Attendance</button>
+    <div id="markAttendanceMessage" class="alert-message"></div>
+  </div>
+
+  <div class="section">
+    <h3><i class="fas fa-list-alt"></i> Today’s Attendance</h3>
+    <button onclick="exportCSV()" class="btn btn-info"><i class="fas fa-download"></i> Export CSV</button>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr><th>Roll No.</th><th>Status</th></tr>
+        </thead>
+        <tbody id="todayTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3><i class="fas fa-calendar-alt"></i> View Specific Date</h3>
+    <div class="form-group">
+      <input id="dateSearch" class="form-control" placeholder="MM/DD/YYYY (e.g., 07/04/2025)">
+    </div>
+    <button onclick="loadDate()" class="btn btn-secondary"><i class="fas fa-search"></i> Load Data</button>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr><th>Roll No.</th><th>Status</th></tr>
+        </thead>
+        <tbody id="searchTable"></tbody>
+      </table>
+    </div>
+    <div id="loadDateMessage" class="alert-message"></div>
+  </div>
+
+  <div class="section">
+    <h3><i class="fas fa-chart-bar"></i> Monthly Report</h3>
+    <div class="form-group">
+      <input id="monthSearch" type="month" class="form-control">
+    </div>
+    <button onclick="loadMonth()" class="btn btn-dark"><i class="fas fa-calendar-check"></i> Generate Report</button>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr><th>Roll No.</th><th>Present Days</th><th>Absent Days</th></tr>
+        </thead>
+        <tbody id="monthTable"></tbody>
+      </table>
+    </div>
+    <pre id="topStats"></pre>
+    <div id="loadMonthMessage" class="alert-message"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    const ADMIN_PASS = "admin123";
+    let todayKey = new Date().toLocaleDateString('en-US'); // Ensure MM/DD/YYYY format for consistency
+    let attendance = JSON.parse(localStorage.getItem("attendance_" + todayKey)) |
+
+| {};
+    let correctCode = "";
+
+    // Initialize all roll numbers as Absent if not already present for today
+    for (let i = 1; i <= 80; i++) {
+      if (!attendance[i]) attendance[i] = "Absent";
+    }
+
+    // Function to display messages
+    function displayMessage(elementId, message, type) {
+        const element = document.getElementById(elementId);
+        element.textContent = message;
+        element.className = `alert-message alert-${type}`;
+        setTimeout(() => {
+            element.textContent = '';
+            element.className = 'alert-message';
+        }, 3000); // Message disappears after 3 seconds
+    }
+
+    function setTodayCode() {
+      const enteredPass = document.getElementById("adminPass").value;
+      const newCode = document.getElementById("setCode").value.trim();
+      if (enteredPass!== ADMIN_PASS) {
+        displayMessage("setCodeMessage", "❌ Invalid Admin Password", "danger");
+        return;
+      }
+      if (!newCode) {
+        displayMessage("setCodeMessage", "Please enter a code.", "warning");
+        return;
+      }
+      correctCode = newCode;
+      displayMessage("setCodeMessage", "✅ Code Set Successfully!", "success");
+      // Optional: Clear the code input after setting
+      document.getElementById("setCode").value = '';
+    }
+
+    function markAttendance() {
+      const roll = parseInt(document.getElementById("roll").value);
+      const code = document.getElementById("code").value.trim();
+
+      if (!correctCode) {
+        displayMessage("markAttendanceMessage", "❗ Code not set yet by admin.", "warning");
+        return;
+      }
+
+      if (code!== correctCode) {
+        displayMessage("markAttendanceMessage", "❌ Wrong code!", "danger");
+        return;
+      }
+
+      if (isNaN(roll) |
+
+| roll < 1 |
+| roll > 80) {
+        displayMessage("markAttendanceMessage", "⚠️ Invalid roll number. Please enter between 1-80.", "warning");
+        return;
+      }
+
+      if (attendance[roll] === "Present") {
+        displayMessage("markAttendanceMessage", "⚠️ This roll number has already marked present today!", "warning");
+        return;
+      }
+
+      attendance[roll] = "Present";
+      saveToday();
+      renderToday();
+      displayMessage("markAttendanceMessage", "✅ Attendance marked successfully!", "success");
+      // Clear inputs
+      document.getElementById("roll").value = '';
+      document.getElementById("code").value = '';
+    }
+
+    function renderToday() {
+      let html = "";
+      for (let i = 1; i <= 80; i++) {
+        const statusClass = attendance[i] === "Present"? "table-success" : "table-danger"; // Bootstrap classes for visual status
+        html += `<tr class="${statusClass}"><td>${i}</td><td>${attendance[i]}</td></tr>`;
+      }
+      document.getElementById("todayTable").innerHTML = html;
+    }
+
+    function saveToday() {
+      localStorage.setItem("attendance_" + todayKey, JSON.stringify(attendance));
+    }
+
+    function exportCSV() {
+      let csv = "Roll No.,Status\n";
+      for (let i = 1; i <= 80; i++) {
+        csv += `${i},${attendance[i]}\n`;
+      }
+      const blob = new Blob([csv], {type: "text/csv"});
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `attendance_${todayKey}.csv`;
+      link.click();
+    }
+
+    function loadDate() {
+      const dateInput = document.getElementById("dateSearch").value;
+      // Basic date validation (MM/DD/YYYY)
+      const dateParts = dateInput.split('/');
+      if (dateParts.length!== 3 |
+
+| isNaN(dateParts) |
+| isNaN(dateParts) |
+| isNaN(dateParts) |
+| dateParts.length!== 2 |
+| dateParts.length!== 2 |
+| dateParts.length!== 4) {
+        displayMessage("loadDateMessage", "❗ Please enter date in MM/DD/YYYY format.", "warning");
+        document.getElementById("searchTable").innerHTML = ''; // Clear previous data
+        return;
+      }
+      const data = JSON.parse(localStorage.getItem("attendance_" + dateInput));
+      if (!data) {
+        displayMessage("loadDateMessage", "No attendance data found for this date.", "warning");
+        document.getElementById("searchTable").innerHTML = ''; // Clear previous data
+        return;
+      }
+      let html = "";
+      for (let i = 1; i <= 80; i++) {
+        const status = data[i] |
+
+| "Absent";
+        const statusClass = status === "Present"? "table-success" : "table-danger";
+        html += `<tr class="${statusClass}"><td>${i}</td><td>${status}</td></tr>`;
+      }
+      document.getElementById("searchTable").innerHTML = html;
+      displayMessage("loadDateMessage", "✅ Data loaded successfully.", "success");
+    }
+
+    function loadMonth() {
+      const selectedMonth = document.getElementById("monthSearch").value; // Format YYYY-MM
+      if (!selectedMonth) {
+        displayMessage("loadMonthMessage", "Please select a month.", "warning");
+        document.getElementById("monthTable").innerHTML = '';
+        document.getElementById("topStats").innerText = '';
+        return;
+      }
+      const monthData = {};
+      for (let i = 1; i <= 80; i++) {
+        monthData[i] = { present: 0, absent: 0 };
+      }
+
+      for (let key in localStorage) {
+        if (key.startsWith("attendance_")) {
+          const dateString = key.replace("attendance_", ""); // MM/DD/YYYY
+          const parts = dateString.split("/");
+          if (parts.length === 3) {
+            const year = parts;
+            const month = parts.padStart(2, "0"); // Ensure MM format
+            if (`${year}-${month}` === selectedMonth) {
+              const record = JSON.parse(localStorage.getItem(key));
+              for (let i = 1; i <= 80; i++) {
+                if (record[i] === "Present") monthData[i].present++;
+                else monthData[i].absent++;
+              }
+            }
+          }
+        }
+      }
+
+      let html = "";
+      let maxP = -1, maxA = -1;
+      let mostP =, mostA =;
+      let anyDataFound = false;
+
+      for (let i = 1; i <= 80; i++) {
+        const p = monthData[i].present;
+        const a = monthData[i].absent;
+        html += `<tr><td>${i}</td><td>${p}</td><td>${a}</td></tr>`;
+        if (p > 0 |
+
+| a > 0) anyDataFound = true; // Check if any attendance recorded for this month
+
+        if (p > maxP) { maxP = p; mostP = [i]; }
+        else if (p === maxP) mostP.push(i);
+        if (a > maxA) { maxA = a; mostA = [i]; }
+        else if (a === maxA) mostA.push(i);
+      }
+      document.getElementById("monthTable").innerHTML = html;
+
+      if (!anyDataFound) {
+          displayMessage("loadMonthMessage", "No attendance data found for the selected month.", "warning");
+          document.getElementById("topStats").innerText = '';
+          return;
+      }
+
+      document.getElementById("topStats").innerText =
+        `Most Present: Roll ${mostP.join(", ")} (${maxP} days)\nMost Absent: Roll ${mostA.join(", ")} (${maxA} days)`;
+      displayMessage("loadMonthMessage", "✅ Monthly report generated successfully.", "success");
+    }
+
+    // Initial render when page loads
+    renderToday();
+  </script>
+</body>
+</html>
